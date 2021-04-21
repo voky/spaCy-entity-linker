@@ -61,9 +61,9 @@ class WikidataQueryController:
         if self._is_cached("entity", alias):
             return self._get_cached_value("entity", alias).copy()
 
-        query_alias = """SELECT j.item_id,j.en_label, j.en_description,j.views,j.inlinks,a.en_alias from aliases as a
+        query_alias = """SELECT j.item_id,j.de_label, j.de_description,j.qrank,a.de_alias from aliases as a
             LEFT JOIN joined as j ON a.item_id = j.item_id
-            WHERE a.en_alias_lowercase = ? and j.item_id NOT NULL"""
+            WHERE a.de_alias_lowercase = ? and j.item_id NOT NULL"""
 
         c.execute(query_alias, [alias.lower()])
         fetched_rows = c.fetchall()
@@ -87,7 +87,7 @@ class WikidataQueryController:
             return self._get_cached_value("name", item_id)
 
         c = self.conn.cursor()
-        query = "SELECT en_label from joined WHERE item_id=?"
+        query = "SELECT de_label from joined WHERE item_id=?"
         c.execute(query, [item_id])
         res = c.fetchone()
 
@@ -103,7 +103,7 @@ class WikidataQueryController:
 
     def get_entity(self, item_id):
         c = self.conn.cursor()
-        query = "SELECT j.item_id,j.en_label,j.en_description,j.views,j.inlinks from joined as j " \
+        query = "SELECT j.item_id,j.de_label,j.de_description,j.qrank from joined as j " \
                 "WHERE j.item_id=={}".format(item_id)
 
         res = c.execute(query)
@@ -112,7 +112,7 @@ class WikidataQueryController:
 
     def get_children(self, item_id, limit=100):
         c = self.conn.cursor()
-        query = "SELECT j.item_id,j.en_label,j.en_description,j.views,j.inlinks from joined as j " \
+        query = "SELECT j.item_id,j.de_label,j.de_description,j.qrank from joined as j " \
                 "JOIN statements as s on j.item_id=s.source_item_id " \
                 "WHERE s.target_item_id={} and s.edge_property_id IN (279,31) LIMIT {}".format(item_id, limit)
 
@@ -122,7 +122,7 @@ class WikidataQueryController:
 
     def get_parents(self, item_id, limit=100):
         c = self.conn.cursor()
-        query = "SELECT j.item_id,j.en_label,j.en_description,j.views,j.inlinks from joined as j " \
+        query = "SELECT j.item_id,j.de_label,j.de_description,j.qrank from joined as j " \
                 "JOIN statements as s on j.item_id=s.target_item_id " \
                 "WHERE s.source_item_id={} and s.edge_property_id IN (279,31) LIMIT {}".format(item_id, limit)
 

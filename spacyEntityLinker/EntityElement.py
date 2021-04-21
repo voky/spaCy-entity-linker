@@ -15,10 +15,10 @@ class EntityElement:
             self.description = row[2]
         if len(row) > 3 and row[3]:
             self.prior = row[3]
+        # if len(row) > 4 and row[4]:
+        #     self.in_degree = row[4]
         if len(row) > 4 and row[4]:
-            self.in_degree = row[4]
-        if len(row) > 5 and row[5]:
-            self.original_alias = row[5]
+            self.original_alias = row[4]
 
         self.span = span
 
