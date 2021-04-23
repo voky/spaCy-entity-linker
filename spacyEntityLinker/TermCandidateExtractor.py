@@ -41,12 +41,17 @@ class TermCandidateExtractor:
                         term_candidates.append(doc[start_index:end_index + 1])
 
                 candidates.append(term_candidates)
+            # term_candidates = TermCandidate(doc[node.i:node.i + 1])
 
             for child in node.children:
                 if child in excluded_children:
                     continue
                 get_candidates(child, doc)
 
-        get_candidates(root, doc)
+        # get_candidates(root, doc)
+
+        for ent in doc.ents:
+            if ent.start_char >= sent.start_char and ent.end_char <= sent.end_char:
+                candidates.append(TermCandidate(ent))
 
         return candidates
