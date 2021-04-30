@@ -178,7 +178,7 @@ class WikidataQueryController:
                 edges.append((item_id, target_item[0], target_item[1]))
                 self._append_chain_elements(target_item[0], level=level + 1, chain=chain, edges=edges,
                                             max_depth=max_depth,
-                                            property=property)
+                                            property=properties)
 
         self._add_to_cache("chain", (item_id, max_depth), chain)
 
@@ -187,5 +187,5 @@ if __name__ == '__main__':
     queryInstance = WikidataQueryController()
 
     queryInstance.init_database_connection()
-    print(queryInstance.get_categories(13191, max_depth=1))
-    print(queryInstance.get_categories(13191, max_depth=1))
+    # print(queryInstance.get_categories(13191, max_depth=1))
+    # print(queryInstance.get_categories(13191, max_depth=1))
